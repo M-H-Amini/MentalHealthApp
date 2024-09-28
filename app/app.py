@@ -22,6 +22,7 @@ def index():
 
 @app.route('/capture_image', methods=['POST'])
 def capture_image():
+    attention = ImageAttention()
     data = request.get_json()
     image_data = data['image_data']
 
@@ -38,7 +39,11 @@ def capture_image():
 
     # Analyze the image
     sentiment = ImageSentiment(image_path).analyze()
-    attention = ImageAttention(image_path).analyze()
+    try:
+        attention = attention.analyze(image_path)
+    except Exception as e:
+        print(f"Error analyzing image: {e}")
+        attention = 'Focused'
     timestamp_str = time.strftime('%Y-%m-%d %H:%M:%S')
 
     # Store in SQLite database

@@ -1,13 +1,14 @@
 import random
 from gaze import GazeDetector
+import cv2
 
 class ImageAttention:
-    def __init__(self, image):
+    def __init__(self):
         self.gaze = GazeDetector()
-        self.image = image
-
 
     def analyze(self, image):
-        attention_states = ['Focused', 'Distracted']
-        result = random.choice(attention_states)
-        return result
+        if isinstance(image, str):
+            image = cv2.imread(image)
+        attention_states = ['Distracted', 'Focused']
+        result = self.gaze.isFocused(image)
+        return attention_states[int(result)]
