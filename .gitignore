@@ -4,3 +4,5 @@ key.txt
 *.png
 *.jpeg
 app/key.txt
+*.db
+app/*.db
