@@ -1,0 +1,16 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.navbar {
+    margin-bottom: 20px;
+}
+
+.container {
+    max-width: 960px;
+}
+
+img.img-fluid {
+    max-width: 100%;
+    height: auto;
+}
