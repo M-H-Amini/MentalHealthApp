@@ -6,13 +6,13 @@
 <!-- Sentiment Trends -->
 <div class="mt-4">
     <h3>Sentiment Trends</h3>
-    <img src="{{ url_for('static', filename='images/sentiment_graph.png') }}" alt="Sentiment Graph" class="img-fluid">
+    <img src="{{ url_for('static', filename='images/sentiment_graph.png') }}?v={{ cache_buster }}" alt="Sentiment Graph" class="img-fluid">
 </div>
 
 <!-- Attention Trends -->
 <div class="mt-4">
     <h3>Attention Trends</h3>
-    <img src="{{ url_for('static', filename='images/attention_graph.png') }}" alt="Attention Graph" class="img-fluid">
+    <img src="{{ url_for('static', filename='images/attention_graph.png') }}?v={{ cache_buster }}" alt="Attention Graph" class="img-fluid">
 </div>
 
 <!-- Word Cloud -->

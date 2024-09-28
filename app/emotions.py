@@ -1,7 +1,7 @@
 from deepface import DeepFace
 import cv2
 
-class ImageSentiment:
+class Emotions:
     def __init__(self, model_name='Emotion'):
         """
         Initializes the ImageSentiment class.
@@ -49,7 +49,7 @@ def main():
         return
 
     # Initialize ImageSentiment
-    sentiment_analyzer = ImageSentiment()
+    sentiment_analyzer = Emotions()
 
     # Define font for text display
     font = cv2.FONT_HERSHEY_SIMPLEX

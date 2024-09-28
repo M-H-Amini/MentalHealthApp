@@ -7,6 +7,7 @@ import sqlite3
 import time
 import base64
 import os
+import random
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
@@ -23,6 +24,7 @@ def index():
 @app.route('/capture_image', methods=['POST'])
 def capture_image():
     attention = ImageAttention()
+    sentiment = ImageSentiment()
     data = request.get_json()
     image_data = data['image_data']
 
@@ -38,7 +40,11 @@ def capture_image():
         f.write(image_bytes)
 
     # Analyze the image
-    sentiment = ImageSentiment(image_path).analyze()
+    try:
+        sentiment = sentiment.analyze(image_path)
+    except Exception as e:
+        print(f"Error analyzing image: {e}")
+        sentiment = 'Neutral'
     try:
         attention = attention.analyze(image_path)
     except Exception as e:
@@ -84,6 +90,7 @@ def journal_ajax():
 @app.route('/report')
 def report():
     try:
+        cache_buster = random.randint(1, 10000)  # You can adjust the range as needed
         # Fetch data from database
         conn = sqlite3.connect('database.db')
         c = conn.cursor()
@@ -110,7 +117,7 @@ def report():
         text_data = ' '.join([entry[0] for entry in journal_entries]) + ' ' + ' '.join([goal[0] for goal in goals])
         visualizer.generate_word_cloud(text_data)
 
-        return render_template('report.html')
+        return render_template('report.html', cache_buster=cache_buster)
     except Exception as e:
         print(f"Error generating report: {e}")
         return render_template('report.html', error="An error occurred while generating the report.")
