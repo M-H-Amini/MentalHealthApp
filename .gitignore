@@ -6,3 +6,6 @@ key.txt
 app/key.txt
 *.db
 app/*.db
+app/static/images/sentiment_graph.png
+app/static/images/word_cloud.png
+app/static/images/attention_graph.png
