@@ -36,8 +36,6 @@ class Goal:
         image = Image.open(BytesIO(image_data))
         # Save and display the image
         image_filename = "goal_image.png"
-        print('Hereeeeee')
-        print(os.getcwd())
         image_path = os.path.join(os.getcwd(), 'static', 'images', image_filename) 
         print(image_path)
         image.save(image_path)

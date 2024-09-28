@@ -17,7 +17,7 @@ if not os.path.exists(app.config['UPLOAD_FOLDER']):
 
 @app.route('/')
 def index():
-    quote, image = Goal().get_motivation("being happy and focused")
+    quote, image = Goal().get_motivation("I want to be healthy and peacefull")
     return render_template('index.html', quote=quote, image=image)
 
 @app.route('/capture_image', methods=['POST'])
