@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row mt-4">
+    <!-- Left Section -->
+    <div class="col-md-3">
+        <h3>About the App</h3>
+        <p>This app helps you track your mental well-being through sentiment and attention analysis.</p>
+        <p>Get started by clicking the "Start" button in the middle.</p>
+    </div>
+
+    <!-- Middle Section -->
+    <div class="col-md-6 text-center">
+        <button id="start-button" class="btn btn-primary btn-lg">Start</button>
+        <button id="stop-button" class="btn btn-danger btn-lg" style="display: none;">Stop</button>
+
+        <!-- Webcam Video -->
+        <div id="webcam-container" style="display: none; margin-top: 20px;">
+            <video id="video" width="480" height="360" autoplay></video>
+        </div>
+
+        <!-- Analysis Display -->
+        <div id="analysis-display" style="display: none; margin-top: 20px;">
+            <h4>Current Analysis</h4>
+            <p><strong>Sentiment:</strong> <span id="sentiment-result"></span></p>
+            <p><strong>Attention:</strong> <span id="attention-result"></span></p>
+        </div>
+    </div>
+
+    <!-- Right Section -->
+    <div class="col-md-3">
+        <h3>Set Your Goals</h3>
+        <form id="goal-form">
+            <div class="form-group">
+                <input type="text" class="form-control" name="goal" placeholder="Enter your goal" required>
+            </div>
+            <button type="submit" class="btn btn-success">Submit Goal</button>
+        </form>
+
+        <h3 class="mt-4">Motivation</h3>
+        <blockquote>"{{ quote }}"</blockquote>
+        <img src="{{ url_for('static', filename='images/' + image) }}" alt="Motivational Image" class="img-fluid">
+    </div>
+</div>
+
+<!-- Bottom Section -->
+<div class="row mt-4">
+    <div class="col-12">
+        <h3>Journal Entry</h3>
+        <form id="journal-form">
+            <div class="form-group">
+                <textarea class="form-control" name="journal_entry" rows="3" placeholder="Write your thoughts..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-secondary">Add Entry</button>
+        </form>
+    </div>
+</div>
+
+<!-- JavaScript -->
+<script>
+    let video = document.getElementById('video');
+    let webcamContainer = document.getElementById('webcam-container');
+    let startButton = document.getElementById('start-button');
+    let stopButton = document.getElementById('stop-button');
+    let captureInterval;
+    let mediaStream = null;
+
+    function startWebcam() {
+        navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+            .then(function(stream) {
+                mediaStream = stream;
+                video.srcObject = stream;
+                video.play();
+                webcamContainer.style.display = 'block';
+                startButton.style.display = 'none';
+                stopButton.style.display = 'inline-block';
+                document.getElementById('analysis-display').style.display = 'block';
+
+                // Start capturing images every 10 seconds
+                captureInterval = setInterval(captureImage, 10000);
+            })
+            .catch(function(err) {
+                console.log("An error occurred: " + err);
+            });
+    }
+
+    function stopWebcam() {
+        if (mediaStream) {
+            mediaStream.getTracks().forEach(track => track.stop());
+        }
+        webcamContainer.style.display = 'none';
+        startButton.style.display = 'inline-block';
+        stopButton.style.display = 'none';
+        document.getElementById('analysis-display').style.display = 'none';
+
+        // Stop capturing images
+        clearInterval(captureInterval);
+    }
+
+    function captureImage() {
+        let canvas = document.createElement('canvas');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+
+        let context = canvas.getContext('2d');
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        // Get image data URL
+        let dataURL = canvas.toDataURL('image/jpeg');
+
+        // Send image data to server via AJAX
+        fetch('{{ url_for('capture_image') }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ image_data: dataURL })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Image data sent to server:', data);
+            // Update the analysis display
+            document.getElementById('sentiment-result').textContent = data.sentiment;
+            document.getElementById('attention-result').textContent = data.attention;
+        })
+        .catch(error => {
+            console.error('Error sending image data:', error);
+        });
+    }
+
+    startButton.addEventListener('click', startWebcam);
+    stopButton.addEventListener('click', stopWebcam);
+
+    // AJAX for Goal Form
+    document.getElementById('goal-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        fetch('{{ url_for('set_goal_ajax') }}', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert('Goal submitted successfully!');
+            this.reset();
+        })
+        .catch(error => {
+            console.error('Error submitting goal:', error);
+        });
+    });
+
+    // AJAX for Journal Form
+    document.getElementById('journal-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        fetch('{{ url_for('journal_ajax') }}', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert('Journal entry added successfully!');
+            this.reset();
+        })
+        .catch(error => {
+            console.error('Error submitting journal entry:', error);
+        });
+    });
+</script>
+{% endblock %}

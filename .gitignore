@@ -1,3 +1,5 @@
 /data
 key.txt
+*.jpg
 *.png
+*.jpeg
