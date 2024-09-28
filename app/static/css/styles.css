@@ -1,16 +1,85 @@
+/* Base styles */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Quicksand', sans-serif; /* Softer, modern font */
+    background-color: #f9f7f7; /* Soft, cozy background */
+    color: #4a4a4a; /* Gentle dark gray text for readability */
+    line-height: 1.6; /* Increased line spacing for better readability */
+    margin: 0;
+    padding: 0;
+    padding-top: 10px;
 }
 
+/* Navbar */
 .navbar {
+    background-color: #ffdfba; /* Warm, pastel peach */
+    padding: 10px 0;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    border-radius: 15px; /* Soft, rounded edges */
     margin-bottom: 20px;
 }
 
+/* Container */
 .container {
     max-width: 960px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff; /* White background for container */
+    border-radius: 15px; /* Soft rounded edges */
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    transition: all 0.3s ease; /* Smooth transitions */
 }
 
+/* Fluid images */
 img.img-fluid {
     max-width: 100%;
     height: auto;
+    border-radius: 10px; /* Soft rounded corners on images */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow on images */
+}
+
+/* Button styles */
+button {
+    background-color: #a1c9c9; /* Soft teal */
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px; /* Rounded edges for buttons */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+    background-color: #70a1a1; /* Slightly darker on hover */
+    transform: scale(1.05); /* Subtle enlarge on hover */
+}
+
+/* Links */
+a {
+    color: #709fb0; /* Cozy, soft blue */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #405d73; /* Darker tone on hover */
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 10px 0;
+    margin-top: 20px;
+    background-color: #ffdfba; /* Match the navbar color */
+    border-radius: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
+}
+
+/* Miscellaneous */
+.box {
+    background-color: #ffffff;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 15px; /* Rounded edges */
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1); /* Soft shadow */
 }

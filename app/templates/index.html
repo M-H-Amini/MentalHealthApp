@@ -1,18 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="row mt-4">
+<div class="row mt-4" style="background-color: #fcf4dd; padding: 20px; border-radius: 15px;">
     <!-- Left Section -->
-    <div class="col-md-3">
-        <h3>About the App</h3>
-        <p>This app helps you track your mental well-being through sentiment and attention analysis.</p>
-        <p>Get started by clicking the "Start" button in the middle.</p>
+    <div class="col-md-3" style="background-color: #fce1e4; padding: 20px; border-radius: 15px;">
+        <h3 style="color: #5a5a5a;">About the App</h3>
+        <p style="color: #444444;">This app helps you track your mental well-being through sentiment and attention analysis.</p>
+        <p style="color: #444444;">Get started by clicking the "Start" button in the middle.</p>
     </div>
 
     <!-- Middle Section -->
-    <div class="col-md-6 text-center">
-        <button id="start-button" class="btn btn-primary btn-lg">Start</button>
-        <button id="stop-button" class="btn btn-danger btn-lg" style="display: none;">Stop</button>
+    <div class="col-md-6 text-center" style="background-color: #ddedea; padding: 20px; border-radius: 15px;">
+        <button id="start-button" class="btn btn-lg" style="background-color: #daeaf6; color: white; border-radius: 25px;">Start</button>
+        <button id="stop-button" class="btn btn-lg" style="background-color: #e8dff5; color: white; display: none; border-radius: 25px;">Stop</button>
 
         <!-- Webcam Video -->
         <div id="webcam-container" style="display: none; margin-top: 20px;">
@@ -21,37 +21,37 @@
 
         <!-- Analysis Display -->
         <div id="analysis-display" style="display: none; margin-top: 20px;">
-            <h4>Current Analysis</h4>
-            <p><strong>Sentiment:</strong> <span id="sentiment-result"></span></p>
-            <p><strong>Attention:</strong> <span id="attention-result"></span></p>
+            <h4 style="color: #5a5a5a;">Current Analysis</h4>
+            <p style="color: #444444;"><strong>Sentiment:</strong> <span id="sentiment-result"></span></p>
+            <p style="color: #444444;"><strong>Attention:</strong> <span id="attention-result"></span></p>
         </div>
     </div>
 
     <!-- Right Section -->
-    <div class="col-md-3">
-        <h3>Set Your Goals</h3>
+    <div class="col-md-3" style="background-color: #fce1e4; padding: 20px; border-radius: 15px;">
+        <h3 style="color: #5a5a5a;">Set Your Goals</h3>
         <form id="goal-form">
             <div class="form-group">
-                <input type="text" class="form-control" name="goal" placeholder="Enter your goal" required>
+                <input type="text" class="form-control" name="goal" placeholder="Enter your goal" required style="border-radius: 15px;">
             </div>
-            <button type="submit" class="btn btn-success">Submit Goal</button>
+            <button type="submit" class="btn" style="background-color: #daeaf6; color: white; border-radius: 25px;">Submit Goal</button>
         </form>
 
-        <h3 class="mt-4">Motivation</h3>
-        <blockquote>"{{ quote }}"</blockquote>
-        <img src="{{ url_for('static', filename='images/' + image) }}" alt="Motivational Image" class="img-fluid">
+        <h3 class="mt-4" style="color: #5a5a5a;">Motivation</h3>
+        <blockquote style="color: #444444;">"{{ quote }}"</blockquote>
+        <img src="{{ url_for('static', filename='images/' + image) }}" alt="Motivational Image" class="img-fluid" style="border-radius: 15px;">
     </div>
 </div>
 
 <!-- Bottom Section -->
-<div class="row mt-4">
+<div class="row mt-4" style="background-color: #fcf4dd; padding: 20px; border-radius: 15px;">
     <div class="col-12">
-        <h3>Journal Entry</h3>
+        <h3 style="color: #5a5a5a;">Journal Entry</h3>
         <form id="journal-form">
             <div class="form-group">
-                <textarea class="form-control" name="journal_entry" rows="3" placeholder="Write your thoughts..." required></textarea>
+                <textarea class="form-control" name="journal_entry" rows="3" placeholder="Write your thoughts..." required style="border-radius: 15px;"></textarea>
             </div>
-            <button type="submit" class="btn btn-secondary">Add Entry</button>
+            <button type="submit" class="btn btn-secondary" style="background-color: #e8dff5; color: white; border-radius: 25px;">Add Entry</button>
         </form>
     </div>
 </div>
