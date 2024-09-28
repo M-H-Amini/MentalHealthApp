@@ -18,6 +18,6 @@
 <!-- Word Cloud -->
 <div class="mt-4">
     <h3>Daily Word Cloud</h3>
-    <img src="{{ url_for('static', filename='images/word_cloud.png') }}" alt="Word Cloud" class="img-fluid">
+    <img src="{{ url_for('static', filename='images/word_cloud.png') }}?v={{ cache_buster }}" alt="Word Cloud" class="img-fluid">
 </div>
 {% endblock %}
