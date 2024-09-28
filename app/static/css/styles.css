@@ -1,12 +1,11 @@
 /* Base styles */
-body {
+html, body {
     font-family: 'Quicksand', sans-serif; /* Softer, modern font */
     background-color: #f9f7f7; /* Soft, cozy background */
     color: #4a4a4a; /* Gentle dark gray text for readability */
     line-height: 1.6; /* Increased line spacing for better readability */
-    margin: 0;
-    padding: 0;
-    padding-top: 0px;
+    margin: 0; /* Removes margins from the body and html */
+    padding: 0; /* Removes padding as well */
 }
 
 /* Navbar */
@@ -15,13 +14,13 @@ body {
     padding: 0px 0;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
     border-radius: 10px; /* Soft, rounded edges */
-    margin-bottom: 0px;
+    margin-bottom: 0; /* Remove bottom margin */
 }
 
 /* Container */
 .container {
     max-width: 960px;
-    margin: 0 auto;
+    margin: 0 auto; /* This centers the container, but keeps no margins */
     padding: 2px;
     background-color: #ffffff; /* White background for container */
     border-radius: 15px; /* Soft rounded edges */
@@ -69,7 +68,6 @@ a:hover {
 .footer {
     text-align: center;
     padding: 10px 0;
-    margin-top: 20px;
     background-color: #ffdfba; /* Match the navbar color */
     border-radius: 15px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
@@ -79,7 +77,7 @@ a:hover {
 .box {
     background-color: #ffffff;
     padding: 20px;
-    margin-bottom: 20px;
     border-radius: 15px; /* Rounded edges */
     box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    margin: 0; /* Ensure no margin for the box class */
 }
