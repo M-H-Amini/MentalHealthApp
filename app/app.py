@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, url_for
 from image_sentiment import ImageSentiment
 from image_attention import ImageAttention
 from visualizer import Visualizer
@@ -23,8 +23,22 @@ def get_db_connection():
 
 @app.route('/')
 def index():
-    quote, image = Goal().get_motivation("I want to be healthy and peaceful")
-    return render_template('index.html', quote=quote, image=image)
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("SELECT goal FROM goals")
+    goals = c.fetchall()
+    conn.close()
+
+    # Concatenate all goals
+    if goals:
+        all_goals_text = ' '.join([row['goal'] for row in goals])
+        quote, image = Goal().get_motivation(all_goals_text, default=False)
+    else:
+        all_goals_text = "I want to be healthy and peaceful"
+        quote, image = Goal().get_motivation(all_goals_text, default=True)
+
+    image_url = url_for('static', filename='images/' + image)
+    return render_template('index.html', quote=quote, image_url=image_url)
 
 @app.route('/capture_image', methods=['POST'])
 def capture_image():
@@ -76,9 +90,23 @@ def set_goal_ajax():
     c.execute("INSERT INTO goals (date, goal) VALUES (?, ?)", (time.strftime('%Y-%m-%d'), goal))
     conn.commit()
     goal_id = c.lastrowid  # Get the ID of the newly inserted goal
+
+    # Now fetch all goals
+    c.execute("SELECT goal FROM goals")
+    goals = c.fetchall()
     conn.close()
 
-    return jsonify({'status': 'success', 'goal': {'id': goal_id, 'goal': goal}})
+    # Concatenate all goals
+    if goals:
+        all_goals_text = ' '.join([row['goal'] for row in goals])
+        quote, image = Goal().get_motivation(all_goals_text, default=False)
+    else:
+        all_goals_text = 'I want to be healthy and peaceful'
+        quote, image = Goal().get_motivation(all_goals_text, default=True)
+
+    image_url = url_for('static', filename='images/' + image)
+    print('Image URL:', image_url)
+    return jsonify({'status': 'success', 'goal': {'id': goal_id, 'goal': goal}, 'quote': quote, 'image_url': image_url})
 
 @app.route('/get_goals', methods=['GET'])
 def get_goals():
@@ -100,9 +128,23 @@ def delete_goal():
     c = conn.cursor()
     c.execute("DELETE FROM goals WHERE id = ?", (goal_id,))
     conn.commit()
+
+    # Now fetch all goals
+    c.execute("SELECT goal FROM goals")
+    goals = c.fetchall()
     conn.close()
 
-    return jsonify({'status': 'success'})
+    # Concatenate all goals
+    if goals:
+        all_goals_text = ' '.join([row['goal'] for row in goals])
+        quote, image = Goal().get_motivation(all_goals_text, default=False)
+    else:
+        all_goals_text = 'I want to be healthy and peaceful'
+        quote, image = Goal().get_motivation(all_goals_text, default=True)
+
+    image_url = url_for('static', filename='images/' + image)
+
+    return jsonify({'status': 'success', 'quote': quote, 'image_url': image_url})
 
 @app.route('/journal_ajax', methods=['POST'])
 def journal_ajax():
