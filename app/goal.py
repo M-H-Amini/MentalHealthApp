@@ -8,8 +8,8 @@ from io import BytesIO
 
 
 class Goal:
-    def get_motivation(self, goal):
-        if 0:
+    def get_motivation(self, goal, default=True):
+        if not default:
             os.environ['OPENAI_API_KEY'] = open('key.txt').read().strip()
             openai.api_key = os.getenv("OPENAI_API_KEY")
             client = openai.OpenAI()
@@ -40,7 +40,6 @@ class Goal:
             image_path = os.path.join(os.getcwd(), 'static', 'images', image_filename) 
             print(image_path)
             image.save(image_path)
-
         else:
             image_filename = "goal_image.png"
             quote = "Be mindful of the present moment, for in stillness, peace blooms and clarity arises."

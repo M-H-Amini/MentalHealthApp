@@ -59,8 +59,8 @@
 
         <br>
         <h3 class="mt-4" style="color: #5a5a5a;">Motivation</h3>
-        <blockquote style="color: #444444;">"{{ quote }}"</blockquote>
-        <img src="{{ url_for('static', filename='images/' + image) }}" alt="Motivational Image" class="img-fluid" style="border-radius: 15px;">
+        <blockquote id="quote" style="color: #444444;">"{{ quote }}"</blockquote>
+        <img id="motivational-image" src="{{ image_url }}" alt="Motivational Image" class="img-fluid" style="border-radius: 15px;">
     </div>
 </div>
 
@@ -81,12 +81,12 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content" style="border-radius: 15px;">
         <div class="modal-header" style="background-color: #e4d8f5;">
-          <h5 class="modal-title" id="motivationalModalLabel" style="color: #5a5a5a;">Stay Positive!</h5>
+          <h5 class="modal-title" id="motivationalModalLabel" style="color: #5a5a5a;">Stay Positive and Distracted!</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body" style="color: #444444;">
           <p>Remember, every moment is a fresh beginning. Keep pushing forward!</p>
-          <p><a href="https://www.youtube.com/watch?v=Dx112W4i5I0" target="_blank">Watch this motivational video</a></p>
+          <p><a href="https://www.youtube.com/watch?v=Dx112W4i5I0" target="_blank">Try doing this breathing exercise :)</a></p>
         </div>
       </div>
     </div>
@@ -105,6 +105,9 @@
     // Declare arrays to track distracted and sad times
     let distractedTimes = [];
     let sadTimes = [];
+
+    // Base URL for images, passed from Flask to JavaScript
+    let imageBaseUrl = "{{ url_for('static', filename='images/') }}";
 
     function startWebcam() {
         navigator.mediaDevices.getUserMedia({ video: true, audio: false })
@@ -159,36 +162,36 @@
         })
         .then(response => response.json())
         .then(data => {
-        console.log('Image data sent to server:', data);
-        // Update the analysis display
-        document.getElementById('sentiment-result').textContent = data.sentiment;
-        document.getElementById('attention-result').textContent = data.attention;
+            console.log('Image data sent to server:', data);
+            // Update the analysis display
+            document.getElementById('sentiment-result').textContent = data.sentiment;
+            document.getElementById('attention-result').textContent = data.attention;
 
-        // Track distractions and sad sentiments
-        const currentTime = new Date().getTime(); // current timestamp in milliseconds
+            // Track distractions and sad sentiments
+            const currentTime = new Date().getTime(); // current timestamp in milliseconds
 
-        if (data.attention === 'Distracted') {
-            distractedTimes.push(currentTime);
-        }
+            if (data.attention === 'Distracted') {
+                distractedTimes.push(currentTime);
+            }
 
-        if (data.sentiment === 'Sad') {
-            sadTimes.push(currentTime);
-        }
+            if (data.sentiment === 'Sad') {
+                sadTimes.push(currentTime);
+            }
 
-        // Remove timestamps older than 1 minute (60000 milliseconds)
-        distractedTimes = distractedTimes.filter(time => currentTime - time <= 60000);
-        sadTimes = sadTimes.filter(time => currentTime - time <= 60000);
+            // Remove timestamps older than 1 minute (60000 milliseconds)
+            distractedTimes = distractedTimes.filter(time => currentTime - time <= 60000);
+            sadTimes = sadTimes.filter(time => currentTime - time <= 60000);
 
-        if (distractedTimes.length > 3 || sadTimes.length > 3) {
-            showMotivationalPopup();
-            // Reset the arrays to prevent multiple pop-ups in quick succession
-            distractedTimes = [];
-            sadTimes = [];
-        }
-    })
-    .catch(error => {
-        console.error('Error sending image data:', error);
-    });
+            if (distractedTimes.length > 3 || sadTimes.length > 3) {
+                showMotivationalPopup();
+                // Reset the arrays to prevent multiple pop-ups in quick succession
+                distractedTimes = [];
+                sadTimes = [];
+            }
+        })
+        .catch(error => {
+            console.error('Error sending image data:', error);
+        });
     }
 
     function showMotivationalPopup() {
@@ -205,9 +208,17 @@
         }, 500); // delay to allow the toast to display first
     }
 
-
     startButton.addEventListener('click', startWebcam);
     stopButton.addEventListener('click', stopWebcam);
+
+    // Function to update motivation
+    function updateMotivation(quote, imageUrl) {
+        // Update the quote
+        document.getElementById('quote').textContent = '"' + quote + '"';
+        // Update the image with a cache buster to prevent caching
+        let imageElement = document.getElementById('motivational-image');
+        imageElement.src = imageUrl + '?t=' + new Date().getTime();
+    }
 
     // AJAX for Goal Form
     document.getElementById('goal-form').addEventListener('submit', function(e) {
@@ -221,6 +232,8 @@
         .then(data => {
             // Add the new goal to the goals list
             addGoalToDisplay(data.goal);
+            // Update the quote and image
+            updateMotivation(data.quote, data.image_url);
             this.reset();
         })
         .catch(error => {
@@ -286,6 +299,8 @@
         .then(data => {
             if (data.status === 'success') {
                 goalElement.remove();
+                // Update the quote and image
+                updateMotivation(data.quote, data.image_url);
             }
         })
         .catch(error => {
