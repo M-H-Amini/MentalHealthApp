@@ -1,10 +1,12 @@
 import random
+from emotions import Emotions
 
 class ImageSentiment:
     def __init__(self):
-        pass
+        self.emotions = Emotions()
 
-    def get_sentiment(self, image):
-        # Code to get sentiment from image
-        sentiments = ["Happy", "Sad", "Angry", "Neutral"]
-        return random.choice(sentiments)
+    def analyze(self, img):
+        dominant_emotion, emotions = self.emotions.predict(img)
+        if not (dominant_emotion.lower() in ['sad', 'happy']):
+            dominant_emotion = 'neutral'
+        return dominant_emotion.capitalize()
