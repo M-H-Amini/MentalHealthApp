@@ -56,18 +56,50 @@
     </div>
 </div>
 
+<!-- Notification Toast -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="motivationToast" class="toast align-items-center text-bg-info border-0" role="alert" aria-live="assertive" aria-atomic="true" style="border-radius: 15px;">
+      <div class="d-flex">
+        <div class="toast-body">
+          You seem distracted or sad. Here's something to cheer you up!
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+</div>
 
+<!-- Motivational Modal -->
+<div class="modal fade" id="motivationalModal" tabindex="-1" aria-labelledby="motivationalModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="border-radius: 15px;">
+        <div class="modal-header" style="background-color: #e4d8f5;">
+          <h5 class="modal-title" id="motivationalModalLabel" style="color: #5a5a5a;">Stay Positive!</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" style="color: #444444;">
+          <p>Remember, every moment is a fresh beginning. Keep pushing forward!</p>
+          <p><a href="https://www.youtube.com/watch?v=Dx112W4i5I0" target="_blank">Watch this motivational video</a></p>
+        </div>
+      </div>
+    </div>
+</div>
 
 
 
 <!-- JavaScript -->
 <script>
+    let alert_thresh = 3; // Threshold for alerts
     let video = document.getElementById('video');
     let webcamContainer = document.getElementById('webcam-container');
     let startButton = document.getElementById('start-button');
     let stopButton = document.getElementById('stop-button');
     let captureInterval;
     let mediaStream = null;
+
+    // Declare arrays to track distracted and sad times
+    let distractedTimes = [];
+    let sadTimes = [];
+
 
     function startWebcam() {
         navigator.mediaDevices.getUserMedia({ video: true, audio: false })
@@ -122,15 +154,53 @@
         })
         .then(response => response.json())
         .then(data => {
-            console.log('Image data sent to server:', data);
-            // Update the analysis display
-            document.getElementById('sentiment-result').textContent = data.sentiment;
-            document.getElementById('attention-result').textContent = data.attention;
-        })
-        .catch(error => {
-            console.error('Error sending image data:', error);
-        });
+        console.log('Image data sent to server:', data);
+        // Update the analysis display
+        document.getElementById('sentiment-result').textContent = data.sentiment;
+        document.getElementById('attention-result').textContent = data.attention;
+
+        // Track distractions and sad sentiments
+        const currentTime = new Date().getTime(); // current timestamp in milliseconds
+
+        if (data.attention === 'Distracted') {
+            distractedTimes.push(currentTime);
+        }
+
+        if (data.sentiment === 'Sad') {
+            sadTimes.push(currentTime);
+        }
+
+        // Remove timestamps older than 1 minute (60000 milliseconds)
+        distractedTimes = distractedTimes.filter(time => currentTime - time <= 60000);
+        sadTimes = sadTimes.filter(time => currentTime - time <= 60000);
+
+        if (distractedTimes.length > alert_thresh || sadTimes.length > alert_thresh) {
+            showMotivationalPopup();
+            // Reset the arrays to prevent multiple pop-ups in quick succession
+            distractedTimes = [];
+            sadTimes = [];
+        }
+    })
+    .catch(error => {
+        console.error('Error sending image data:', error);
+    });
     }
+
+    function showMotivationalPopup() {
+    // Show the toast notification
+    const toastEl = document.getElementById('motivationToast');
+    const toast = new bootstrap.Toast(toastEl);
+    toast.show();
+
+    // Show the modal after a slight delay
+    setTimeout(() => {
+        const modalEl = document.getElementById('motivationalModal');
+        const modal = new bootstrap.Modal(modalEl);
+        modal.show();
+    }, 500); // delay to allow the toast to display first
+    }
+
+
 
     startButton.addEventListener('click', startWebcam);
     stopButton.addEventListener('click', stopWebcam);

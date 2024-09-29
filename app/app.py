@@ -56,7 +56,7 @@ def capture_image():
     conn = sqlite3.connect('database.db')
     c = conn.cursor()
     c.execute("INSERT INTO image (timestamp, image_path, sentiment, attention) VALUES (?, ?, ?, ?)",
-              (timestamp_str, image_path, sentiment, attention))
+            (timestamp_str, image_path, sentiment, attention))
     conn.commit()
     conn.close()
 
