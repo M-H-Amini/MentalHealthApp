@@ -2,6 +2,71 @@
 
 {% block content %}
 <h2 class="mt-4">How to Use the App</h2>
-<p>This tutorial will guide you through the steps to make the most out of our app.</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background-color: #ddedea; /* Light grayish-green background */
+            color: #444444; /* Dark gray text color */
+            font-family: Arial, sans-serif;
+        }
+
+        .tutorial-container {
+            background-color: #fcf4dd; /* Pale yellow background */
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 800px;
+            margin: 50px auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #efbdc3; /* Light pink heading color */
+        }
+
+        p {
+            margin-bottom: 20px;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        .highlight {
+            color: #efbdc3; /* Light pink highlight */
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #fce1e4; /* Light pink button background */
+            color: #444444;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background-color: #fcf4dd; /* Pale yellow hover effect */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="tutorial-container">
+        <h2>Tutorial</h2>
+        <p>Press the <span class="highlight">"Start"</span> button to begin tracking your workday in terms of focus and sentiment.</p>
+        <p>Set one or more goals for your day and press <span class="highlight">"Submit Goal"</span> to receive a motivational picture and quote to help you start strong!</p>
+        <p>During the day, you can journal and write down whatever is on your mind. Press the <span class="highlight">"Add Entry"</span> button to add your thoughts to your journal.</p>
+        <p>If you get distracted during your workday, the app will help you get back on track with guided breathing and focus exercises.</p>
+        <p>Visit the <span class="highlight">"Report"</span> tab to view your daily report!</p>
+    </div>
+
+</body>
+</html>
+
 <!-- Add more content as needed -->
 {% endblock %}
