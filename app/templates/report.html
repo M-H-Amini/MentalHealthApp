@@ -1,32 +1,32 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2 class="mt-4">Daily Report</h2>
+<h2 class="mt-4" style="color: #444444;">Daily Report</h2>
 
-<div class="container mt-4">
+<div class="container mt-4" style="background-color: #ddedea; padding: 20px; border-radius: 8px;">
     <div class="row">
         <!-- Column 1 Row 1: Sentiment Trends -->
-        <div class="col-md-6 d-flex justify-content-center">
+        <div class="col-md-6 d-flex justify-content-center" style="background-color: #fcf4dd; padding: 15px; border-radius: 8px;">
             <img src="{{ url_for('static', filename='images/sentiment_graph.png') }}?v={{ cache_buster }}" 
-                 alt="Sentiment Graph" class="img-fluid" style="width: 95%; height: auto;">
+                 alt="Sentiment Graph" class="img-fluid" style="width: 95%; height: auto; border: 2px solid #fce1e4;">
         </div>
         
         <!-- Column 2 Row 1: Word Cloud -->
-        <div class="col-md-6 d-flex justify-content-center">
+        <div class="col-md-6 d-flex justify-content-center" style="background-color: #fcf4dd; padding: 15px; border-radius: 8px;">
             <img src="{{ url_for('static', filename='images/attention_graph.png') }}?v={{ cache_buster }}" 
-                 alt="Attention Graph" class="img-fluid" style="width: 95%; height: auto;">
+                 alt="Attention Graph" class="img-fluid" style="width: 95%; height: auto; border: 2px solid #fce1e4;">
         </div>
     </div>
 
     <div class="row mt-4">
         <!-- Column 1 Row 2: Attention Trends -->
-        <div class="col-md-6 d-flex justify-content-center">
-            <img src="{{ url_for('static', filename='images/word_cloud.png') }}?v={{ cache_buster }}" alt="Word Cloud" class="img-fluid">
+        <div class="col-md-6 d-flex justify-content-center" style="background-color: #fcf4dd; padding: 15px; border-radius: 8px;">
+            <img src="{{ url_for('static', filename='images/word_cloud.png') }}?v={{ cache_buster }}" alt="Word Cloud" class="img-fluid" style="border: 2px solid #fce1e4;">
         </div>
 
         <!-- Column 2 Row 2: Empty -->
-        <div class="col-md-6 d-flex justify-content-center">
-            <img src="{{ url_for('static', filename='images/goal_image.png') }}?v={{ cache_buster }}" alt="goal image" class="img-fluid" style="width: 85%; height: auto;">
+        <div class="col-md-6 d-flex justify-content-center" style="background-color: #fcf4dd; padding: 15px; border-radius: 8px;">
+            <img src="{{ url_for('static', filename='images/goal_image.png') }}?v={{ cache_buster }}" alt="Goal Image" class="img-fluid" style="width: 85%; height: auto; border: 2px solid #fce1e4;">
         </div>
     </div>
 </div>

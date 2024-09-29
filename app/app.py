@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, render_template, request, jsonify
 from image_sentiment import ImageSentiment
 from image_attention import ImageAttention
 from visualizer import Visualizer
@@ -23,7 +23,7 @@ def get_db_connection():
 
 @app.route('/')
 def index():
-    quote, image = Goal().get_motivation("I want to be healthy and peacefull")
+    quote, image = Goal().get_motivation("I want to be healthy and peaceful")
     return render_template('index.html', quote=quote, image=image)
 
 @app.route('/capture_image', methods=['POST'])
@@ -120,7 +120,7 @@ def journal_ajax():
 @app.route('/report')
 def report():
     try:
-        cache_buster = random.randint(1, 10000)  # You can adjust the range as needed
+        cache_buster = random.randint(1, 10000)
         # Fetch data from database
         conn = get_db_connection()
         c = conn.cursor()

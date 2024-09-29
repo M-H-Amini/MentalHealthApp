@@ -27,6 +27,45 @@
         .navbar-light .navbar-nav .nav-link:hover {
             border-color: #cb3695; /* Dark pink border on hover */
         }
+
+        .goal-item {
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            color: #ffffff;
+            padding: 15px 25px;
+            border-radius: 30px;
+            font-size: 1rem;
+            position: relative;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            display: inline-block;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Close Button Styles */
+        .goal-item .close-button {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #ff6b6b;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 16px;
+            text-align: center;
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;               /* Added for Flexbox centering */
+            align-items: center;         /* Centers content vertically */
+            justify-content: center;     /* Centers content horizontally */
+            padding: 0;                  /* Removes default padding */
+        }
+
+        .goal-item .close-button:hover {
+            background-color: #ff6b6b;
+            color: #ffffff;
+        }
     </style>
     <!-- Navigation Menu -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
