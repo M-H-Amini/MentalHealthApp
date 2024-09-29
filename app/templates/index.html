@@ -8,7 +8,7 @@
         <p style="color: #444444;">This app helps you stay focused by analyzing your emotional 
                                 state and attention levels using AI!💡🎯 It provides reports on focus and emotions, 
                                 and offers guided mindfulness exercises when distractions are detected.🧘🏻‍♀️✨ You can 
-                                improve mindfulness, boost work efficiency, and track Your progress.😍😎 To begin, 
+                                improve mindfulness, boost work efficiency, and track your progress.😍😎 To begin, 
                                 click the "Start" button!✅</p>
 
         <br>
@@ -43,14 +43,19 @@
     </div>
 
     <!-- Right Section -->
-    <div class="col-md-4" style="background-color: #fce1e4; padding: 20px; border-radius: 15px;">
+    <div class="col-md-4 d-flex flex-column" style="background-color: #fce1e4; padding: 20px; border-radius: 15px;">
         <h3 style="color: #5a5a5a;">Today's Goal</h3>
         <form id="goal-form">
             <div class="form-group">
                 <textarea class="form-control" name="goal" rows="2" placeholder="I want to stay focused and mindful throughout my workday..." required style="border-radius: 15px;"></textarea>
             </div>
-            <button type="submit" class="btn btn-secondary" style="background-color: #e4d8f5; color: #5a5a5a; border-radius: 25px;">Submit Goal</button>
+            <button type="submit" class="btn btn-secondary mb-3" style="background-color: #e4d8f5; color: #5a5a5a; border-radius: 25px;">Submit Goal</button>
         </form>
+
+        <!-- Goals Display -->
+        <div id="goals-container" class="flex-grow-1" style="max-height: 200px; overflow-y: auto;">
+            <!-- Goals will be dynamically inserted here -->
+        </div>
 
         <br>
         <h3 class="mt-4" style="color: #5a5a5a;">Motivation</h3>
@@ -87,8 +92,6 @@
     </div>
 </div>
 
-
-
 <!-- JavaScript -->
 <script>
     let alert_thresh = 3; // Threshold for alerts
@@ -102,7 +105,6 @@
     // Declare arrays to track distracted and sad times
     let distractedTimes = [];
     let sadTimes = [];
-
 
     function startWebcam() {
         navigator.mediaDevices.getUserMedia({ video: true, audio: false })
@@ -177,7 +179,7 @@
         distractedTimes = distractedTimes.filter(time => currentTime - time <= 60000);
         sadTimes = sadTimes.filter(time => currentTime - time <= 60000);
 
-        if (distractedTimes.length > alert_thresh || sadTimes.length > alert_thresh) {
+        if (distractedTimes.length > 3 || sadTimes.length > 3) {
             showMotivationalPopup();
             // Reset the arrays to prevent multiple pop-ups in quick succession
             distractedTimes = [];
@@ -190,19 +192,18 @@
     }
 
     function showMotivationalPopup() {
-    // Show the toast notification
-    const toastEl = document.getElementById('motivationToast');
-    const toast = new bootstrap.Toast(toastEl);
-    toast.show();
+        // Show the toast notification
+        const toastEl = document.getElementById('motivationToast');
+        const toast = new bootstrap.Toast(toastEl);
+        toast.show();
 
-    // Show the modal after a slight delay
-    setTimeout(() => {
-        const modalEl = document.getElementById('motivationalModal');
-        const modal = new bootstrap.Modal(modalEl);
-        modal.show();
-    }, 500); // delay to allow the toast to display first
+        // Show the modal after a slight delay
+        setTimeout(() => {
+            const modalEl = document.getElementById('motivationalModal');
+            const modal = new bootstrap.Modal(modalEl);
+            modal.show();
+        }, 500); // delay to allow the toast to display first
     }
-
 
 
     startButton.addEventListener('click', startWebcam);
@@ -218,13 +219,82 @@
         })
         .then(response => response.json())
         .then(data => {
-            alert('Goal submitted successfully!');
+            // Add the new goal to the goals list
+            addGoalToDisplay(data.goal);
             this.reset();
         })
         .catch(error => {
             console.error('Error submitting goal:', error);
         });
     });
+
+    // Function to fetch and display all goals
+    function fetchGoals() {
+        fetch('{{ url_for('get_goals') }}')
+        .then(response => response.json())
+        .then(data => {
+            const goalsContainer = document.getElementById('goals-container');
+            goalsContainer.innerHTML = ''; // Clear existing goals
+            data.goals.forEach(goal => {
+                addGoalToDisplay(goal);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching goals:', error);
+        });
+    }
+
+    // Function to add a goal to the display
+    function addGoalToDisplay(goal) {
+        const goalsContainer = document.getElementById('goals-container');
+
+        // Create a span for each goal item with custom class
+        const goalItem = document.createElement('span');
+        goalItem.classList.add('goal-item');
+        goalItem.setAttribute('data-goal-id', goal.id);
+
+        // Goal text
+        const goalText = document.createElement('span');
+        goalText.textContent = goal.goal;
+
+        // Close button
+        const closeButton = document.createElement('button');
+        closeButton.classList.add('close-button');
+        closeButton.innerHTML = '&times;'; // × symbol for the close button
+        closeButton.setAttribute('aria-label', 'Close');
+
+        closeButton.addEventListener('click', function() {
+            deleteGoal(goal.id, goalItem);
+        });
+
+        // Assemble the goal item
+        goalItem.appendChild(goalText);
+        goalItem.appendChild(closeButton);
+        goalsContainer.appendChild(goalItem);
+    }
+
+    // Function to delete a goal
+    function deleteGoal(goalId, goalElement) {
+        const formData = new FormData();
+        formData.append('goal_id', goalId);
+
+        fetch('{{ url_for('delete_goal') }}', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                goalElement.remove();
+            }
+        })
+        .catch(error => {
+            console.error('Error deleting goal:', error);
+        });
+    }
+
+    // Fetch and display goals on page load
+    fetchGoals();
 
     // AJAX for Journal Form
     document.getElementById('journal-form').addEventListener('submit', function(e) {
