@@ -9,26 +9,41 @@
 </head>
 <body>
     <style>
+        /* Hover effect for dark pink color */
         .navbar-light .navbar-nav .nav-link:hover {
             color: #cb3695 !important; /* Dark pink on hover */
+        }
+    
+        /* Add a border to each nav-link item */
+        .navbar-light .navbar-nav .nav-link {
+            border: 2px solid #f1c2c7; /* Light pink border */
+            padding: 5px 10px; /* Add some padding for space around the text */
+            border-radius: 5px; /* Optional: rounded corners */
+            margin-right: 10px; /* Add spacing between the items */
+            transition: all 0.3s ease; /* Smooth transition effect */
+        }
+    
+        /* Optional: Add a different border on hover */
+        .navbar-light .navbar-nav .nav-link:hover {
+            border-color: #cb3695; /* Dark pink border on hover */
         }
     </style>
     <!-- Navigation Menu -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="{{ url_for('index') }}" style="font-size: 28px; font-weight: bold; color: #f1c2c7;">✨  Mindful Workday</a>
+        <a class="navbar-brand" href="{{ url_for('index') }}" style="font-size: 28px; font-weight: bold; color: #f1c2c7;">🌸 Mindful Workday 🕊</a>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('index') }}" style="color: rgb(240, 138, 206);">Home</a>
+                    <a class="nav-link" href="{{ url_for('index') }}" style="color: #eea5c0;">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('report') }}" style="color: rgb(240, 138, 206);">Report</a>
+                    <a class="nav-link" href="{{ url_for('report') }}" style="color: #eea5c0;">Report</a>
                 </li> 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('tutorial') }}" style="color: rgb(240, 138, 206);">Tutorial</a>
+                    <a class="nav-link" href="{{ url_for('tutorial') }}" style="color: #eea5c0;">Tutorial</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('about') }}" style="color: rgb(240, 138, 206);">About Us</a>
+                    <a class="nav-link" href="{{ url_for('about') }}" style="color: #eea5c0;">About Us</a>
                 </li>
             </ul>
         </div>
