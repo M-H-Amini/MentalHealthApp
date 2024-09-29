@@ -1,7 +1,29 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2 class="mt-4">About Us</h2>
-<p>Learn more about the app and its creators.</p>
-<!-- Add more content as needed -->
+<div class="row mt-4" style="background-color: #fcf4dd; padding: 20px; border-radius: 15px;">
+    <!-- Left Section -->
+    <div class="col-md-4 text-center" style="background-color: #fce1e4; padding: 20px; border-radius: 15px;">
+        <h3 style="color: #5a5a5a;">About Us</h3>
+        <p style="color: #444444;">We are Delaram Ghobari and Mohammad Hossein Amini, two passionate researchers, students, and a couple from the University of Ottawa.</p>
+        <img src="{{ url_for('static', filename='images/mha.jpg') }}?v={{ cache_buster }}" alt="Mohammad Hossein Amini" class="img-fluid" style="border-radius: 15px; width: 70%; margin-bottom: 15px;">
+        <p style="color: #444444;">Mohammad Hossein is pursuing his Ph.D., and Delaram is completing her Master's, both in the Electrical and Computer Engineering Department. We share a love for AI and technology, but more than that, we love to work on projects together that bring positive change.</p>
+    </div>
+
+    <!-- Middle Section -->
+    <div class="col-md-4 text-center" style="background-color: #ddedea; padding: 20px; border-radius: 15px;">
+        <img src="{{ url_for('static', filename='images/delaram.jpg') }}?v={{ cache_buster }}" alt="Delaram" class="img-fluid" style="border-radius: 15px; width: 70%; margin-bottom: 15px;">
+        <p style="color: #444444;">In a world that’s becoming increasingly dominated by social media, we’ve both felt how it’s impacting people's ability to focus and be mindful. Have you noticed how hard it is to concentrate for even five minutes without distraction?</p>
+        <p style="color: #444444;">This growing concern inspired us to combine our AI expertise and create something that helps combat these distractions—hence, the creation of our mental well-being app. It was also the reason we chose to participate in the <a href="http://tracker.hackthehill.com" style="color: #5a5a5a;">Hack the Hill II</a> competition, where we aim to make an impact with this project.</p>
+    </div>
+
+    <!-- Right Section -->
+    <div class="col-md-4 text-center" style="background-color: #fce1e4; padding: 20px; border-radius: 15px;">
+        <h3 style="color: #5a5a5a;">Our Mission</h3>
+        <p style="color: #444444;">We believe that technology, when used responsibly, can be a force for good. By creating this app, we hope to help people improve their focus, be more mindful, and ultimately lead healthier, happier lives.</p>
+        <p style="color: #444444;">Our journey together as students, researchers, and partners is driven by this shared goal: to harness the power of AI to improve the well-being of those who use our app.</p>
+        <br>
+        <p style="color: #444444;">We hope you enjoy using the app as much as we enjoyed creating it!</p>
+    </div>
+</div>
 {% endblock %}
