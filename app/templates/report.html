@@ -3,21 +3,32 @@
 {% block content %}
 <h2 class="mt-4">Daily Report</h2>
 
-<div class="row mt-4">
-    <!-- Sentiment Trends -->
-    <div class="col-md-6">
-        <img src="{{ url_for('static', filename='images/sentiment_graph.png') }}?v={{ cache_buster }}" alt="Sentiment Graph" class="img-fluid">
+<div class="container mt-4">
+    <div class="row">
+        <!-- Column 1 Row 1: Sentiment Trends -->
+        <div class="col-md-6 d-flex justify-content-center">
+            <img src="{{ url_for('static', filename='images/sentiment_graph.png') }}?v={{ cache_buster }}" 
+                 alt="Sentiment Graph" class="img-fluid" style="width: 95%; height: auto;">
+        </div>
+        
+        <!-- Column 2 Row 1: Word Cloud -->
+        <div class="col-md-6 d-flex justify-content-center">
+            <img src="{{ url_for('static', filename='images/attention_graph.png') }}?v={{ cache_buster }}" 
+                 alt="Attention Graph" class="img-fluid" style="width: 95%; height: auto;">
+        </div>
     </div>
 
-    <!-- Attention Trends -->
-    <div class="col-md-6">
-        <img src="{{ url_for('static', filename='images/attention_graph.png') }}?v={{ cache_buster }}" alt="Attention Graph" class="img-fluid">
+    <div class="row mt-4">
+        <!-- Column 1 Row 2: Attention Trends -->
+        <div class="col-md-6 d-flex justify-content-center">
+            <img src="{{ url_for('static', filename='images/word_cloud.png') }}?v={{ cache_buster }}" alt="Word Cloud" class="img-fluid">
+        </div>
+
+        <!-- Column 2 Row 2: Empty -->
+        <div class="col-md-6 d-flex justify-content-center">
+            <img src="{{ url_for('static', filename='images/goal_image.png') }}?v={{ cache_buster }}" alt="goal image" class="img-fluid" style="width: 85%; height: auto;">
+        </div>
     </div>
 </div>
 
-<!-- Word Cloud -->
-<div class="mt-4">
-    <h3> </h3>
-    <img src="{{ url_for('static', filename='images/word_cloud.png') }}?v={{ cache_buster }}" alt="Word Cloud" class="img-fluid">
-</div>
 {% endblock %}
