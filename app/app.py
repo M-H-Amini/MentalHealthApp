@@ -16,6 +16,11 @@ app.config['UPLOAD_FOLDER'] = 'static/uploads'
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
 
+def get_db_connection():
+    conn = sqlite3.connect('database.db')
+    conn.row_factory = sqlite3.Row  # To access columns by name
+    return conn
+
 @app.route('/')
 def index():
     quote, image = Goal().get_motivation("I want to be healthy and peacefull")
@@ -23,8 +28,8 @@ def index():
 
 @app.route('/capture_image', methods=['POST'])
 def capture_image():
-    attention = ImageAttention()
-    sentiment = ImageSentiment()
+    attention_analyzer = ImageAttention()
+    sentiment_analyzer = ImageSentiment()
     data = request.get_json()
     image_data = data['image_data']
 
@@ -41,34 +46,59 @@ def capture_image():
 
     # Analyze the image
     try:
-        sentiment = sentiment.analyze(image_path)
+        sentiment_result = sentiment_analyzer.analyze(image_path)
     except Exception as e:
-        print(f"Error analyzing image: {e}")
-        sentiment = 'Neutral'
+        print(f"Error analyzing image sentiment: {e}")
+        sentiment_result = 'Neutral'
     try:
-        attention = attention.analyze(image_path)
+        attention_result = attention_analyzer.analyze(image_path)
     except Exception as e:
-        print(f"Error analyzing image: {e}")
-        attention = 'Focused'
+        print(f"Error analyzing image attention: {e}")
+        attention_result = 'Focused'
     timestamp_str = time.strftime('%Y-%m-%d %H:%M:%S')
 
     # Store in SQLite database
-    conn = sqlite3.connect('database.db')
+    conn = get_db_connection()
     c = conn.cursor()
     c.execute("INSERT INTO image (timestamp, image_path, sentiment, attention) VALUES (?, ?, ?, ?)",
-            (timestamp_str, image_path, sentiment, attention))
+              (timestamp_str, image_path, sentiment_result, attention_result))
     conn.commit()
     conn.close()
 
-    return jsonify({'status': 'success', 'sentiment': sentiment, 'attention': attention})
+    return jsonify({'status': 'success', 'sentiment': sentiment_result, 'attention': attention_result})
 
 @app.route('/set_goal_ajax', methods=['POST'])
 def set_goal_ajax():
     goal = request.form['goal']
 
-    conn = sqlite3.connect('database.db')
+    conn = get_db_connection()
     c = conn.cursor()
     c.execute("INSERT INTO goals (date, goal) VALUES (?, ?)", (time.strftime('%Y-%m-%d'), goal))
+    conn.commit()
+    goal_id = c.lastrowid  # Get the ID of the newly inserted goal
+    conn.close()
+
+    return jsonify({'status': 'success', 'goal': {'id': goal_id, 'goal': goal}})
+
+@app.route('/get_goals', methods=['GET'])
+def get_goals():
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("SELECT id, goal FROM goals")
+    goals = c.fetchall()
+    conn.close()
+
+    # Convert to list of dictionaries
+    goals_list = [{'id': row['id'], 'goal': row['goal']} for row in goals]
+    return jsonify({'goals': goals_list})
+
+@app.route('/delete_goal', methods=['POST'])
+def delete_goal():
+    goal_id = request.form['goal_id']
+
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("DELETE FROM goals WHERE id = ?", (goal_id,))
     conn.commit()
     conn.close()
 
@@ -79,7 +109,7 @@ def journal_ajax():
     entry = request.form['journal_entry']
     timestamp = time.strftime('%Y-%m-%d %H:%M:%S')
 
-    conn = sqlite3.connect('database.db')
+    conn = get_db_connection()
     c = conn.cursor()
     c.execute("INSERT INTO journal (timestamp, entry) VALUES (?, ?)", (timestamp, entry))
     conn.commit()
@@ -92,7 +122,7 @@ def report():
     try:
         cache_buster = random.randint(1, 10000)  # You can adjust the range as needed
         # Fetch data from database
-        conn = sqlite3.connect('database.db')
+        conn = get_db_connection()
         c = conn.cursor()
 
         # Get sentiment data
@@ -114,7 +144,7 @@ def report():
         visualizer = Visualizer()
         visualizer.generate_sentiment_graph(sentiment_data)
         visualizer.generate_attention_graph(attention_data)
-        text_data = ' '.join([entry[0] for entry in journal_entries]) + ' ' + ' '.join([goal[0] for goal in goals])
+        text_data = ' '.join([entry['entry'] for entry in journal_entries]) + ' ' + ' '.join([goal['goal'] for goal in goals])
         visualizer.generate_word_cloud(text_data)
 
         return render_template('report.html', cache_buster=cache_buster)
