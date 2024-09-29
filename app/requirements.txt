@@ -1,0 +1,12 @@
+deepface==0.0.93
+Flask==1.1.2
+matplotlib==3.5.1
+mediapipe==0.9.1.0
+numpy==1.22.4
+openai==1.50.2
+opencv_python==4.7.0.68
+Pillow==10.4.0
+requests==2.27.1
+seaborn==0.11.2
+wordcloud==1.9.3
+tensorflow.keras
