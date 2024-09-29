@@ -3,16 +3,16 @@
 {% block content %}
 <h2 class="mt-4">Daily Report</h2>
 
-<!-- Sentiment Trends -->
-<div class="mt-4">
-    <h3> </h3>
-    <img src="{{ url_for('static', filename='images/sentiment_graph.png') }}?v={{ cache_buster }}" alt="Sentiment Graph" class="img-fluid">
-</div>
+<div class="row mt-4">
+    <!-- Sentiment Trends -->
+    <div class="col-md-6">
+        <img src="{{ url_for('static', filename='images/sentiment_graph.png') }}?v={{ cache_buster }}" alt="Sentiment Graph" class="img-fluid">
+    </div>
 
-<!-- Attention Trends -->
-<div class="mt-4">
-    <h3> </h3>
-    <img src="{{ url_for('static', filename='images/attention_graph.png') }}?v={{ cache_buster }}" alt="Attention Graph" class="img-fluid">
+    <!-- Attention Trends -->
+    <div class="col-md-6">
+        <img src="{{ url_for('static', filename='images/attention_graph.png') }}?v={{ cache_buster }}" alt="Attention Graph" class="img-fluid">
+    </div>
 </div>
 
 <!-- Word Cloud -->

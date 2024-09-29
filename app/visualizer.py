@@ -14,7 +14,7 @@ class Visualizer:
             sentiments = []
             timestamps = []
         else:
-            timestamps = [data[0] for data in sentiment_data]
+            timestamps = [data[0][11:16] for data in sentiment_data]
             sentiments = [self.sentiment_to_numeric(data[1]) for data in sentiment_data]
         
         # Prepare data for pie chart
@@ -30,16 +30,16 @@ class Visualizer:
         colors = sns.color_palette("pastel")[0:3]
 
         # Create subplots: 1 row, 2 columns
-        fig, axes = plt.subplots(1, 2, figsize=(18, 7))
+        fig, axes = plt.subplots(2, 1, figsize=(7, 6))
 
         # Left Subplot: Line Plot
         sns.lineplot(x=timestamps, y=sentiments, marker='o', ax=axes[0], palette="viridis")
         axes[0].set_title('Sentiment Trends', fontsize=16)
-        axes[0].set_xlabel('Timestamp', fontsize=14)
-        axes[0].set_ylabel('Sentiment Level', fontsize=14)
+        axes[0].set_xlabel('Time', fontsize=14)
+        # axes[0].set_ylabel('Sentiment Level', fontsize=14)
         axes[0].set_yticks([0, 1, 2])
         axes[0].set_yticklabels(['Sad', 'Neutral', 'Happy'])
-        axes[0].tick_params(axis='x', rotation=45)
+        axes[0].tick_params(axis='x', rotation=90)
         axes[0].grid(True)
 
         # Right Subplot: Pie Chart
@@ -56,7 +56,7 @@ class Visualizer:
             attentions = []
             timestamps = []
         else:
-            timestamps = [data[0] for data in attention_data]
+            timestamps = [data[0][11:16]  for data in attention_data]
             attentions = [self.attention_to_numeric(data[1]) for data in attention_data]
         
         # Prepare data for pie chart
@@ -72,16 +72,17 @@ class Visualizer:
         colors = sns.color_palette("Oranges")[0:2]
 
         # Create subplots: 1 row, 2 columns
-        fig, axes = plt.subplots(1, 2, figsize=(18, 7))
+        fig, axes = plt.subplots(2, 1, figsize=(7, 6))
 
         # Left Subplot: Line Plot
         sns.lineplot(x=timestamps, y=attentions, marker='o', ax=axes[0], color='orange')
         axes[0].set_title('Attention Trends', fontsize=16)
-        axes[0].set_xlabel('Timestamp', fontsize=14)
-        axes[0].set_ylabel('Attention Level', fontsize=14)
+        axes[0].set_xlabel('Time', fontsize=14)
+        # axes[0].set_ylabel('Attention Level', fontsize=14)
         axes[0].set_yticks([0, 1])
         axes[0].set_yticklabels(['Distracted', 'Focused'])
-        axes[0].tick_params(axis='x', rotation=45)
+        axes[0].tick_params(axis='x', rotation=90)
+        axes[0].tick_params(axis='y', rotation=0)
         axes[0].grid(True)
 
         # Right Subplot: Pie Chart
