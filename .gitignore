@@ -1,14 +1,7 @@
 /data
+/static/uploads
 key.txt
-*.jpg
-*.png
-*.jpeg
-app/key.txt
 *.db
-app/*.db
-app/static/images/sentiment_graph.png
-app/static/images/word_cloud.png
-app/static/images/attention_graph.png
 static/images/sentiment_graph.png
 static/images/word_cloud.png
 static/images/attention_graph.png
