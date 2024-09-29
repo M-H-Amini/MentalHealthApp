@@ -81,12 +81,12 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content" style="border-radius: 15px;">
         <div class="modal-header" style="background-color: #e4d8f5;">
-          <h5 class="modal-title" id="motivationalModalLabel" style="color: #5a5a5a;">Stay Positive and Distracted!</h5>
+          <h5 class="modal-title" id="motivationalModalLabel" style="color: #5a5a5a;">Stay Positive and Focused!</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body" style="color: #444444;">
+            <p><a href="https://www.youtube.com/watch?v=Dx112W4i5I0" target="_blank">Try doing this 1-minute breathing exercise :)</a></p>
           <p>Remember, every moment is a fresh beginning. Keep pushing forward!</p>
-          <p><a href="https://www.youtube.com/watch?v=Dx112W4i5I0" target="_blank">Try doing this breathing exercise :)</a></p>
         </div>
       </div>
     </div>
@@ -211,6 +211,8 @@
     startButton.addEventListener('click', startWebcam);
     stopButton.addEventListener('click', stopWebcam);
 
+    let loadingInterval; // Variable to hold the interval ID
+
     // Function to update motivation
     function updateMotivation(quote, imageUrl) {
         // Update the quote
@@ -218,6 +220,28 @@
         // Update the image with a cache buster to prevent caching
         let imageElement = document.getElementById('motivational-image');
         imageElement.src = imageUrl + '?t=' + new Date().getTime();
+
+        // Clear the loading animation interval
+        if (loadingInterval) {
+            clearInterval(loadingInterval);
+            loadingInterval = null;
+        }
+    }
+
+    // Function to show loading indicator
+    function showLoadingIndicator() {
+        let loadingTextOptions = ['Loading', 'Loading.', 'Loading..', 'Loading...'];
+        let index = 0;
+        let quoteElement = document.getElementById('quote');
+
+        // Start the loading animation
+        loadingInterval = setInterval(() => {
+            quoteElement.textContent = loadingTextOptions[index % loadingTextOptions.length];
+            index++;
+        }, 500);
+
+        // Clear the image or show a placeholder
+        document.getElementById('motivational-image').src = '{{ url_for('static', filename='images/default_goal.png') }}';
     }
 
     // AJAX for Goal Form
@@ -232,9 +256,19 @@
         .then(data => {
             // Add the new goal to the goals list
             addGoalToDisplay(data.goal);
-            // Update the quote and image
-            updateMotivation(data.quote, data.image_url);
             this.reset();
+            // Show a loading indicator
+            showLoadingIndicator();
+            // Fetch updated motivation
+            fetch('{{ url_for('update_motivation') }}')
+            .then(response => response.json())
+            .then(data => {
+                // Update the quote and image
+                updateMotivation(data.quote, data.image_url);
+            })
+            .catch(error => {
+                console.error('Error updating motivation:', error);
+            });
         })
         .catch(error => {
             console.error('Error submitting goal:', error);
@@ -299,8 +333,18 @@
         .then(data => {
             if (data.status === 'success') {
                 goalElement.remove();
-                // Update the quote and image
-                updateMotivation(data.quote, data.image_url);
+                // Show a loading indicator
+                showLoadingIndicator();
+                // Fetch updated motivation
+                fetch('{{ url_for('update_motivation') }}')
+                .then(response => response.json())
+                .then(data => {
+                    // Update the quote and image
+                    updateMotivation(data.quote, data.image_url);
+                })
+                .catch(error => {
+                    console.error('Error updating motivation:', error);
+                });
             }
         })
         .catch(error => {
